@@ -1,19 +1,44 @@
 import { Box, Button, Checkbox, colors, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2/Grid2'
-import React from 'react'
-import { useCallback } from 'react'
-import { useNavigate } from 'react-router'
+import React, { useState, useCallback } from 'react'
 import CustomInput from './CustomInput'
-import { BrowserRouter, Route } from 'react-router-dom'
 import { FaLeaf } from 'react-icons/fa'
+import { toast } from 'react-toastify' // Import toast nếu bạn sử dụng
 
 const SigninPage = () => {
-  //    const navigate = useNavigate();
-  //    console.log(navigate);
+  // const navigate = useNavigate()
+  const [formData, setFormData] = useState({ username: '', password: '' })
+  const [errors, setErrors] = useState({})
 
-  //   const gotoQuestion = useCallback(() => {
-  //     navigate("./QuestionPage")
-  // }, [navigate]);
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+
+    // Xóa lỗi khi người dùng bắt đầu nhập lại
+    setErrors({ ...errors, [name]: undefined })
+  }
+
+  const handleLogin = async (e) => {
+    e.preventDefault() // Ngăn chặn hành động mặc định của form
+
+    // try {
+    //   // const response = await api.login(formData) // Gọi API đăng nhập
+    //   const token = response.data.token
+
+    //   localStorage.setItem('token', token)
+    //   toast.success('Đăng nhập thành công!') // Thông báo thành công
+    // } catch (error) {
+    //   if (error.response && error.response.data.errors) {
+    //     // Hiển thị lỗi xác thực
+    //     setErrors(error.response.data.errors) // Giả sử lỗi từ backend theo cấu trúc như đã định nghĩa trước đó
+    //     Object.values(error.response.data.errors).forEach(
+    //       (message) => toast.error(message) // Hiển thị từng thông báo lỗi
+    //     )
+    //   } else {
+    //     toast.error('Đăng nhập thất bại, vui lòng thử lại.') // Lỗi chung
+    //   }
+    // }
+  }
 
   return (
     <Grid
@@ -78,22 +103,35 @@ const SigninPage = () => {
               mt={7}
               mb={3}
             ></Typography>
-            <Typography color='white' fontWeight='bold' sx={{ textAlign: 'center', marginTop: 4 }} mt={7} mb={3}>
-              Sign in hehe
+            <Typography color='white' fontSize={30} sx={{ textAlign: 'center', marginTop: 4 }} mt={7} mb={3}>
+              Sign in
             </Typography>
           </Box>
 
           {/* INPUTS */}
-          <CustomInput label='Login' placeholder='' isIconActive={false} />
-          <CustomInput label='Password' placeholder='' isIconActive={true} />
-          {/* <CustomInput
-            label="MFA Code"
-            placeholder="Enter your code..."
+          <CustomInput
+            label='Login'
+            placeholder=''
+            name='username' // Thêm name cho input
+            value={formData.username} // Liên kết với state
+            onChange={handleChange} // Thêm hàm xử lý thay đổi
+            error={!!errors.username} // Kiểm tra có lỗi không
+            helperText={errors.username} // Hiển thị thông báo lỗi
+            isIconActive={false}
+          />
+          <CustomInput
+            label='Password'
+            placeholder=''
+            name='password' // Thêm name cho input
+            value={formData.password} // Liên kết với state
+            onChange={handleChange} // Thêm hàm xử lý thay đổi
+            error={!!errors.password} // Kiểm tra có lỗi không
+            helperText={errors.password} // Hiển thị thông báo lỗi
             isIconActive={true}
-          /> */}
+          />
           {/* INPUT END */}
           <Button
-            //onClick={gotoQuestion}
+            onClick={handleLogin}
             variant='contained'
             fullWidth
             sx={{ mt: 4, boxShadow: `0 0 20px ${colors.green[500]}` }}
