@@ -1,16 +1,34 @@
-import React, { useState } from 'react'
-import { FaClock, FaLeaf, FaWrench } from 'react-icons/fa'
-
-const LetterGrid = () => {
+import React from 'react'
+import LoginForm from './pages/Login/Login'
+import { Box } from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2/Grid2'
+import SigninPage from './components/SigninPage'
+import TitleBox from './components/TitleBox'
+import MainLayout from './layouts/MainLayout'
+const App = () => {
   return (
-    <div className='maintenance-container'>
-      <div className='maintenance-message'>
-        <FaLeaf size={50} color='#66CDAA' />
-        <h1>Website đang được code</h1>
-        <p>Em Long sẽ trở lại sớm. Cảm ơn chị Trà đã kiên nhẫn!</p>
-      </div>
-    </div>
+    <MainLayout>
+      <Box
+        sx={{
+          width: {
+            sm: '90vw',
+            xs: '90vw',
+            md: '60vw',
+            lg: '60vw',
+            xl: '60vw'
+          }
+        }}
+      >
+        {/* GRID SYSTEM */}
+        <Grid container height='90vh'>
+          <SigninPage />
+
+          <TitleBox />
+        </Grid>
+        {/* GRID SYSTEM END */}
+      </Box>
+    </MainLayout>
   )
 }
 
-export default LetterGrid
+export default App
