@@ -5,6 +5,7 @@ import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import SigninPage from './components/SigninPage'
 import TitleBox from './components/TitleBox'
 import MainLayout from './layouts/MainLayout'
+import { ToastContainer } from 'react-toastify'
 const App = () => {
   return (
     <MainLayout>
