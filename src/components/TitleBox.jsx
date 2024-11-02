@@ -25,14 +25,14 @@ const TitleBox = () => {
       >
         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='flex-start'>
           <Typography variant='h4' fontWeight='bold' color='whitesmoke' mb={3}>
-            Join Our <br />
-            <FaLeaf size={30} /> system
+            Tham gia hệ thống<br />
+            <FaLeaf size={30} /> của chúng tôi 
           </Typography>
           <Typography variant='body1' fontWeight='' color='whitesmoke'>
-            Use your <FaLeaf size={15} /> to redeem gifts or not, it's up to you.
+            Sử dụng <FaLeaf size={15} /> của bạn để đổi quà hoặc không, tùy bạn.
           </Typography>
           <Typography variant='body1' fontWeight='' color='whitesmoke'>
-            I don't care. Give me <FaLeaf size={15} />, right now.
+            Tôi đếch quan tâm. Đưa <FaLeaf size={15} /> cho tôi ngay!!!.
           </Typography>
         </Box>
       </Box>

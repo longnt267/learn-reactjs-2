@@ -1,34 +1,43 @@
 import React from 'react'
-import LoginForm from './pages/Login/Login'
-import { Box } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2/Grid2'
-import SigninPage from './components/SigninPage'
-import TitleBox from './components/TitleBox'
-import MainLayout from './layouts/MainLayout'
 import { ToastContainer } from 'react-toastify'
+import { Navigate, Route, Routes } from 'react-router'
+import { PublicRoute } from './components/PublicRoute'
+import { PrivateRoute } from './components/PrivateRoute'
+import { publicRoutes } from './routes/publicRoutes'
+import { privateRoutes } from './routes/privateRoutes'
 const App = () => {
   return (
-    <MainLayout>
-      <Box
-        sx={{
-          width: {
-            sm: '90vw',
-            xs: '90vw',
-            md: '60vw',
-            lg: '60vw',
-            xl: '60vw'
+    <>
+      <ToastContainer closeButton={false} />
+      <Routes>
+        {/* Public Routes */}
+        <Route element={<PublicRoute />}>
+          {publicRoutes.map((route) => {
+            return <Route key={route.path} path={route.path} element={route.element} />
           }
-        }}
-      >
-        {/* GRID SYSTEM */}
-        <Grid container height='90vh'>
-          <SigninPage />
+          )}
+        </Route>
 
-          <TitleBox />
-        </Grid>
-        {/* GRID SYSTEM END */}
-      </Box>
-    </MainLayout>
+        {/* Private Routes */}
+        <Route element={<PrivateRoute />}>
+          {privateRoutes.map((route) => {
+            if (route.children) {
+              return (
+                <Route key={route.path} path={route.path}>
+                  {route.children.map((child) => (
+                    <Route key={child.path} path={child.path} element={child.element} />
+                  ))}
+                </Route>
+              )
+            }
+            return <Route key={route.path} path={route.path} element={route.element} />
+          })}
+        </Route>
+
+        {/* Redirect to login by default */}
+        <Route path='*' element={<Navigate to='/login' />} />
+      </Routes>
+    </>
   )
 }
 

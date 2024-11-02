@@ -1,7 +1,10 @@
 import { Box, ThemeProvider } from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import { theme } from '../theme'
+import SigninPage from '../components/SigninPage'
+import TitleBox from '../components/TitleBox'
 
-const MainLayout = ({ children }) => {
+const MainLayout = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -17,7 +20,25 @@ const MainLayout = ({ children }) => {
           alignItems: 'center'
         }}
       >
-        {children}
+        <Box
+          sx={{
+            width: {
+              sm: '90vw',
+              xs: '90vw',
+              md: '60vw',
+              lg: '60vw',
+              xl: '60vw'
+            }
+          }}
+        >
+          {/* GRID SYSTEM */}
+          <Grid container height='90vh'>
+            <SigninPage />
+
+            <TitleBox />
+          </Grid>
+          {/* GRID SYSTEM END */}
+        </Box>
       </Box>
     </ThemeProvider>
   )

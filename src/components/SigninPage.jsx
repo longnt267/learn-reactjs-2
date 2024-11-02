@@ -3,7 +3,8 @@ import Grid from '@mui/material/Unstable_Grid2/Grid2'
 import React, { useState, useCallback } from 'react'
 import CustomInput from './CustomInput'
 import { FaLeaf } from 'react-icons/fa'
-import { toast } from 'react-toastify' // Import toast nếu bạn sử dụng
+import { ToastContainer, toast } from 'react-toastify' // Import toast và ToastContainer để sử dụng
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS của toast
 
 const SigninPage = () => {
   // const navigate = useNavigate()
@@ -21,23 +22,24 @@ const SigninPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault() // Ngăn chặn hành động mặc định của form
 
-    // try {
-    //   // const response = await api.login(formData) // Gọi API đăng nhập
-    //   const token = response.data.token
+    try {
+      throw new Error('a')
+      // const response = await api.login(formData) // Gọi API đăng nhập
+      // const token = response.data.token
 
-    //   localStorage.setItem('token', token)
-    //   toast.success('Đăng nhập thành công!') // Thông báo thành công
-    // } catch (error) {
-    //   if (error.response && error.response.data.errors) {
-    //     // Hiển thị lỗi xác thực
-    //     setErrors(error.response.data.errors) // Giả sử lỗi từ backend theo cấu trúc như đã định nghĩa trước đó
-    //     Object.values(error.response.data.errors).forEach(
-    //       (message) => toast.error(message) // Hiển thị từng thông báo lỗi
-    //     )
-    //   } else {
-    //     toast.error('Đăng nhập thất bại, vui lòng thử lại.') // Lỗi chung
-    //   }
-    // }
+      // localStorage.setItem('token', token)
+      toast.success('Đăng nhập thành công!') // Thông báo thành công
+    } catch (error) {
+      if (error.response && error.response.data.errors) {
+        // Hiển thị lỗi xác thực
+        setErrors(error.response.data.errors) // Giả sử lỗi từ backend theo cấu trúc như đã định nghĩa trước đó
+        Object.values(error.response.data.errors).forEach(
+          (message) => toast.error(message) // Hiển thị từng thông báo lỗi
+        )
+      } else {
+        toast.error('Error') // Lỗi chung
+      }
+    }
   }
 
   return (
@@ -104,7 +106,7 @@ const SigninPage = () => {
               mb={3}
             ></Typography>
             <Typography color='white' fontSize={30} sx={{ textAlign: 'center', marginTop: 4 }} mt={7} mb={3}>
-              Sign in
+              Đăng nhập nè
             </Typography>
           </Box>
 
@@ -136,7 +138,7 @@ const SigninPage = () => {
             fullWidth
             sx={{ mt: 4, boxShadow: `0 0 20px ${colors.green[500]}` }}
           >
-            Login
+            Đăng nhập đê
           </Button>
         </Box>
       </Box>
