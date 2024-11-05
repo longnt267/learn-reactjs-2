@@ -1,5 +1,4 @@
-import { Box, Typography } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2'
+import { Box, Grid, Typography } from '@mui/material'
 import { FaLeaf } from 'react-icons/fa'
 
 const TitleBox = () => {
@@ -25,8 +24,9 @@ const TitleBox = () => {
       >
         <Box display='flex' flexDirection='column' justifyContent='center' alignItems='flex-start'>
           <Typography variant='h4' fontWeight='bold' color='whitesmoke' mb={3}>
-            Tham gia hệ thống<br />
-            <FaLeaf size={30} /> của chúng tôi 
+            Tham gia hệ thống
+            <br />
+            <FaLeaf size={30} /> của chúng tôi
           </Typography>
           <Typography variant='body1' fontWeight='' color='whitesmoke'>
             Sử dụng <FaLeaf size={15} /> của bạn để đổi quà hoặc không, tùy bạn.

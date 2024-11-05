@@ -2,7 +2,7 @@ import { VisibilityOff } from '@mui/icons-material'
 import { Box, IconButton, InputAdornment, InputBase, Paper, Typography } from '@mui/material'
 import { colors } from '../theme'
 
-const CustomInput = ({ isIconActive, label, placeholder }) => {
+const CustomInput = ({ isIconActive, label, placeholder, ...props }) => {
   return (
     <Box display='flex' flexDirection='column' alignContent='center' justifyContent='flex-start' mb={2}>
       <Box display='flex' flexDirection='column' justifyContent='flex-start'>
@@ -17,6 +17,7 @@ const CustomInput = ({ isIconActive, label, placeholder }) => {
           }}
         >
           <InputBase
+            {...props}
             placeholder={placeholder}
             fullWidth
             sx={{

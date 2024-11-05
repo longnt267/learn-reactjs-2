@@ -1,8 +1,19 @@
+import { HomeLayout } from '../layouts/Home/Home'
+import MainLayout from '../layouts/MainLayout'
+import { Home } from '../pages/Home/Home'
+
+export const publicRoutes = [
+  {
+    path: '/login',
+    element: <MainLayout />
+  }
+]
+
 export const privateRoutes = [
-  // {
-  //   path: '/home',
-  //   element: <Home />,
-  // },
+  {
+    path: '/home',
+    element: <Home />
+  }
   // {
   //   path: '/profile',
   //   element: <Profile />,
@@ -32,4 +43,4 @@ export const privateRoutes = [
   //     },
   //   ],
   // },
-];
+]
