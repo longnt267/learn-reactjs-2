@@ -3,8 +3,7 @@ import { ToastContainer } from 'react-toastify'
 import { Navigate, Route, Routes } from 'react-router'
 import { PublicRoute } from './components/PublicRoute'
 import { PrivateRoute } from './components/PrivateRoute'
-import { publicRoutes } from './routes/publicRoutes'
-import { privateRoutes } from './routes/privateRoutes'
+import { privateRoutes, publicRoutes } from './routes/routes'
 const App = () => {
   return (
     <>
@@ -14,8 +13,7 @@ const App = () => {
         <Route element={<PublicRoute />}>
           {publicRoutes.map((route) => {
             return <Route key={route.path} path={route.path} element={route.element} />
-          }
-          )}
+          })}
         </Route>
 
         {/* Private Routes */}

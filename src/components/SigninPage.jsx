@@ -1,44 +1,57 @@
-import { Box, Button, Checkbox, colors, Typography } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2/Grid2'
-import React, { useState, useCallback } from 'react'
+import { Box, Button, colors, Grid, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import CustomInput from './CustomInput'
 import { FaLeaf } from 'react-icons/fa'
-import { ToastContainer, toast } from 'react-toastify' // Import toast và ToastContainer để sử dụng
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS của toast
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { authApi } from '../apis/auth'
+import { useNavigate } from 'react-router-dom'
 
 const SigninPage = () => {
-  // const navigate = useNavigate()
-  const [formData, setFormData] = useState({ username: '', password: '' })
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({}) // Tích hợp các lỗi thành 1 object duy nhất
+  const [loading, setLoading] = useState(false) // Added state for loading
+  const navigate = useNavigate()
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
+  const validateForm = () => {
+    let isValid = true
+    const newErrors = {}
 
-    // Xóa lỗi khi người dùng bắt đầu nhập lại
-    setErrors({ ...errors, [name]: undefined })
+    if (!email.trim() || !password.trim()) {
+      isValid = false
+      toast.error('Email và mật khẩu không được để trống')
+    }
+
+    setErrors(newErrors)
+    return isValid
   }
 
+  // Sửa lại hàm handleChange
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   const handleLogin = async (e) => {
-    e.preventDefault() // Ngăn chặn hành động mặc định của form
+    e.preventDefault()
+    if (!validateForm()) {
+      return
+    }
 
+    setLoading(true) // Set loading to true when starting the API call
     try {
-      throw new Error('a')
-      // const response = await api.login(formData) // Gọi API đăng nhập
-      // const token = response.data.token
-
-      // localStorage.setItem('token', token)
-      toast.success('Đăng nhập thành công!') // Thông báo thành công
+      const response = await authApi.login(email, password)
+      localStorage.setItem('token', response.token)
+      toast.success('Đăng nhập thành công!')
+      // Redirect immediately after successful login
+      navigate('/home') // or wherever your main app page is
     } catch (error) {
-      if (error.response && error.response.data.errors) {
-        // Hiển thị lỗi xác thực
-        setErrors(error.response.data.errors) // Giả sử lỗi từ backend theo cấu trúc như đã định nghĩa trước đó
-        Object.values(error.response.data.errors).forEach(
-          (message) => toast.error(message) // Hiển thị từng thông báo lỗi
-        )
+      if (error.response?.data?.errors) {
+        Object.values(error.response.data.errors).forEach((message) => {
+          toast.error(message)
+        })
       } else {
-        toast.error('Error') // Lỗi chung
+        toast.error(error.response?.data?.message || 'Đã có lỗi xảy ra')
       }
+    } finally {
+      setLoading(false) // Set loading to false after the API call
     }
   }
 
@@ -78,7 +91,6 @@ const SigninPage = () => {
       >
         <Box width='50%'>
           <Box display='flex' flexDirection='column' alignItems='center'>
-            {/* LOGO */}
             <Box
               sx={{
                 mt: '60px',
@@ -96,40 +108,32 @@ const SigninPage = () => {
                 <FaLeaf size={20} />
               </Typography>
             </Box>
-            {/* LOGO END */}
 
-            <Typography
-              color='white'
-              fontWeight='bold'
-              sx={{ textAlign: 'center', margin: 0 }}
-              mt={7}
-              mb={3}
-            ></Typography>
             <Typography color='white' fontSize={30} sx={{ textAlign: 'center', marginTop: 4 }} mt={7} mb={3}>
-              Đăng nhập nè
+              Đăng nhập
             </Typography>
           </Box>
 
           {/* INPUTS */}
           <CustomInput
             label='Login'
-            placeholder=''
-            name='username' // Thêm name cho input
-            value={formData.username} // Liên kết với state
-            onChange={handleChange} // Thêm hàm xử lý thay đổi
-            error={!!errors.username} // Kiểm tra có lỗi không
-            helperText={errors.username} // Hiển thị thông báo lỗi
+            placeholder='Email'
+            name='email' // Thêm name cho input
+            value={email} // Liên kết với state
+            onChange={(e) => setEmail(e.target.value)} // Thêm hàm xử lý thay đổi
+            error={!!errors.email} // Kiểm tra có lỗi không
+            helperText={errors.email} // Hiển thị thông báo lỗi
             isIconActive={false}
           />
           <CustomInput
             label='Password'
-            placeholder=''
+            placeholder='Password'
             name='password' // Thêm name cho input
-            value={formData.password} // Liên kết với state
-            onChange={handleChange} // Thêm hàm xử lý thay đổi
+            value={password} // Liên kết với state
+            onChange={(e) => setPassword(e.target.value)} // Thêm hàm xử lý thay đổi
             error={!!errors.password} // Kiểm tra có lỗi không
             helperText={errors.password} // Hiển thị thông báo lỗi
-            isIconActive={true}
+            isIconActive={false}
           />
           {/* INPUT END */}
           <Button
@@ -137,11 +141,13 @@ const SigninPage = () => {
             variant='contained'
             fullWidth
             sx={{ mt: 4, boxShadow: `0 0 20px ${colors.green[500]}` }}
+            disabled={loading} // Disable button while loading
           >
-            Đăng nhập đê
+            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </Button>
         </Box>
       </Box>
+      <ToastContainer position='top-right' autoClose={3000} />
     </Grid>
   )
 }

@@ -1,5 +1,4 @@
-import { Box, ThemeProvider } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2/Grid2'
+import { Box, Grid, ThemeProvider } from '@mui/material'
 import { theme } from '../theme'
 import SigninPage from '../components/SigninPage'
 import TitleBox from '../components/TitleBox'
