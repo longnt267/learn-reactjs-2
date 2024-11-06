@@ -1,3 +1,4 @@
 export const colors = {
-  green: '#2dce65'
+  green: '#55705A',
+  pearl: '#ECDCCB'
 }
