@@ -2,6 +2,6 @@
   margin-top: 50px;
   border: 1px solid;
   border-color: rgba(0, 0, 0, 0.12);
-  background-color: white;
+  background-color: #ecdccb; /* Pearl color from color.js */
   border-radius: calc(4px + 8px);
 }

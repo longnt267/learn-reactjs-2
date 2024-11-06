@@ -177,6 +177,7 @@ export const ListProduct = () => {
                 onBlur={handleBlur}
                 tabIndex={index}
                 className={focusedCardIndex === index ? 'Mui-focused' : ''}
+                sx={{ backgroundColor: colors.pearl }}
               >
                 <CardMedia
                   component='img'
@@ -205,7 +206,12 @@ export const ListProduct = () => {
                     variant='outlined'
                     size='small'
                     onClick={handleClickOpen}
-                    sx={{ mb: 1, mr: 1, color: `${colors.green}`, '&:hover': { border: '1px solid #60b17d' } }}
+                    sx={{
+                      mb: 1,
+                      mr: 1,
+                      color: `${colors.green}`,
+                      '&:hover': { border: '1px solid #60b17d', backgroundColor: colors.green, color: colors.pearl }
+                    }}
                   >
                     Lụm luôn
                   </Button>
