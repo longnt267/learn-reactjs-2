@@ -14,7 +14,8 @@ import {
   DialogContent,
   DialogContentText,
   TextField,
-  DialogActions
+  DialogActions,
+  InputAdornment
 } from '@mui/material'
 import './product.css'
 import * as React from 'react'
@@ -116,6 +117,7 @@ export const ListProduct = () => {
   const [focusedCardIndex, setFocusedCardIndex] = React.useState(null)
   const [open, setOpen] = React.useState(false)
   const [products, setProducts] = React.useState([])
+  const [selectedProduct, setSelectedProduct] = React.useState(null)
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -126,7 +128,6 @@ export const ListProduct = () => {
         console.error('There was a problem with the fetch operation:', error)
       }
     }
-    console.log(products)
     fetchData()
   }, [])
 
@@ -138,7 +139,9 @@ export const ListProduct = () => {
     setFocusedCardIndex(null)
   }
 
-  const handleClickOpen = () => {
+  // Thay đổi hàm này để lấy thông tin trực tiếp từ product
+  const handleClickOpen = (product) => {
+    setSelectedProduct(product)
     setOpen(true)
   }
 
@@ -205,7 +208,7 @@ export const ListProduct = () => {
                   <Button
                     variant='outlined'
                     size='small'
-                    onClick={handleClickOpen}
+                    onClick={() => handleClickOpen(product)}
                     sx={{
                       mb: 1,
                       mr: 1,
@@ -221,41 +224,67 @@ export const ListProduct = () => {
           ))}
         </Grid>
       </Box>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          component: 'form',
-          onSubmit: (event) => {
-            event.preventDefault()
-            const formData = new FormData(event.currentTarget)
-            const formJson = Object.fromEntries(formData.entries())
-            const email = formJson.email
-            console.log(email)
-            handleClose()
-          }
-        }}
-      >
-        <DialogTitle>Subscribe</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates occasionally.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            required
-            margin='dense'
-            id='name'
-            name='email'
-            label='Email Address'
-            type='email'
-            fullWidth
-            variant='standard'
-          />
+
+      {/* Dialog sẽ sử dụng selectedProduct trực tiếp */}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle sx={{ backgroundColor: colors.linen, color: colors.green }}>Chi tiết sản phẩm</DialogTitle>
+        <DialogContent sx={{ backgroundColor: colors.linen, paddingTop: 10 }}>
+          {selectedProduct && (
+            <Grid item xs={12}>
+              <SyledCard>
+                <CardMedia
+                  component='img'
+                  alt='product image'
+                  image={selectedProduct.url}
+                  sx={{
+                    aspectRatio: '16 / 9',
+                    borderBottom: '1px solid',
+                    borderColor: 'divider'
+                  }}
+                />
+                <SyledCardContent>
+                  <Typography gutterBottom variant='h6' component='div'>
+                    {selectedProduct.name}
+                  </Typography>
+                  <StyledTypography variant='body2' color='text.secondary' gutterBottom>
+                    {selectedProduct.description}
+                  </StyledTypography>
+                </SyledCardContent>
+                <Box sx={{ bottom: 0, pl: 2, pb: 2, display: 'flex', justifyContent: 'space-between' }}>
+                  <Box>
+                    <FaLeaf size={20} color={colors.green} />
+                    {selectedProduct.tea}
+                  </Box>
+                </Box>
+              </SyledCard>
+            </Grid>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type='submit'>Subscribe</Button>
+          <Box display='flex' justifyContent='space-between' width='100%'>
+            <TextField
+              label='Số lượng'
+              type='number'
+              InputProps={{
+                endAdornment: <InputAdornment position='end'></InputAdornment>
+              }}
+              sx={{ mr: 2, width: '80%' }}
+              inputProps={{
+                min: 1,
+                max: 2
+              }}
+            />
+            <Button
+              sx={{
+                color: `${colors.green}`,
+                backgroundColor: colors.linen,
+                '&:hover': { backgroundColor: colors.green, color: colors.pearl },
+                width: '20%'
+              }}
+            >
+              Đổi quà
+            </Button>
+          </Box>
         </DialogActions>
       </Dialog>
     </Container>
