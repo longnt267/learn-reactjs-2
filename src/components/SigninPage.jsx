@@ -1,5 +1,5 @@
-import { Box, Button, colors, Grid, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Button, Checkbox, colors, Grid, IconButton, InputAdornment, Typography } from '@mui/material'
+import React, { useState, useEffect } from 'react'
 import CustomInput from './CustomInput'
 import { FaLeaf } from 'react-icons/fa'
 import { ToastContainer, toast } from 'react-toastify'
@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom'
 const SigninPage = () => {
   const [errors, setErrors] = useState({}) // Tích hợp các lỗi thành 1 object duy nhất
   const [loading, setLoading] = useState(false) // Added state for loading
+  const [showPassword, setShowPassword] = useState(false) // Added state for showing password
+  const [rememberAccount, setRememberAccount] = useState(false) // Added state for remembering account
   const navigate = useNavigate()
 
   const validateForm = () => {
@@ -39,6 +41,9 @@ const SigninPage = () => {
     try {
       const response = await authApi.login(email, password)
       localStorage.setItem('token', response.token)
+      if (rememberAccount) {
+        localStorage.setItem('email', email)
+      }
       toast.success('Đăng nhập thành công!')
       // Redirect immediately after successful login
       navigate('/home') // or wherever your main app page is
@@ -54,6 +59,20 @@ const SigninPage = () => {
       setLoading(false) // Set loading to false after the API call
     }
   }
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        document.getElementById('login-button').click()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
 
   return (
     <Grid
@@ -124,6 +143,7 @@ const SigninPage = () => {
             error={!!errors.email} // Kiểm tra có lỗi không
             helperText={errors.email} // Hiển thị thông báo lỗi
             isIconActive={false}
+            autoComplete='email' // Added autocomplete for email
           />
           <CustomInput
             label='Password'
@@ -133,10 +153,25 @@ const SigninPage = () => {
             onChange={(e) => setPassword(e.target.value)} // Thêm hàm xử lý thay đổi
             error={!!errors.password} // Kiểm tra có lỗi không
             helperText={errors.password} // Hiển thị thông báo lỗi
-            isIconActive={false}
+            isIconActive={true}
+            type={showPassword ? 'text' : 'password'} // Toggle password visibility
+            setShowPassword={setShowPassword}
+            showPassword={showPassword}
+            autoComplete='current-password' // Added autocomplete for password
           />
           {/* INPUT END */}
+          <Box display='flex' alignItems='center' justifyContent='space-between' sx={{ my: 2 }}>
+            <Typography color='white' variant='body2'>
+              Remember account
+            </Typography>
+            <Checkbox
+              checked={rememberAccount}
+              onChange={(e) => setRememberAccount(e.target.checked)}
+              color='primary'
+            />
+          </Box>
           <Button
+            id='login-button'
             onClick={handleLogin}
             variant='contained'
             fullWidth
