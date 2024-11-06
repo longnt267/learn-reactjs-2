@@ -1,8 +1,8 @@
-import { VisibilityOff } from '@mui/icons-material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { Box, IconButton, InputAdornment, InputBase, Paper, Typography } from '@mui/material'
 import { colors } from '../theme'
 
-const CustomInput = ({ isIconActive, label, placeholder, ...props }) => {
+const CustomInput = ({ isIconActive, label, placeholder, setShowPassword, showPassword, ...props }) => {
   return (
     <Box display='flex' flexDirection='column' alignContent='center' justifyContent='flex-start' mb={2}>
       <Box display='flex' flexDirection='column' justifyContent='flex-start'>
@@ -28,8 +28,8 @@ const CustomInput = ({ isIconActive, label, placeholder, ...props }) => {
             endAdornment={
               isIconActive && (
                 <InputAdornment position='end' sx={{ pr: 1 }}>
-                  <IconButton edge='end'>
-                    <VisibilityOff />
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge='end'>
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               )
