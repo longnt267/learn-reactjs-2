@@ -14,6 +14,8 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { FaInfinity, FaLeaf } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { colors } from '../../assets/color'
+import { useAuth } from '../../hooks/useAuth' // Import useAuth hook
+import { toast } from 'react-toastify' // Import toast nếu bạn muốn thông báo
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -33,15 +35,19 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 export const Header = () => {
   const navigate = useNavigate()
   const [open, setOpen] = React.useState(false)
+  const { logout, user } = useAuth() // Lấy logout và user từ auth context
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen)
   }
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    navigate('/login')
+  const handleLogout = () => {
+    logout() // Gọi logout từ context
+    toast.success('Đăng xuất thành công!')
+    // Không cần navigate vì PublicRoute sẽ tự redirect khi isAuthenticated = false
   }
+
+  
 
   return (
     <AppBar
@@ -58,7 +64,7 @@ export const Header = () => {
         <StyledToolbar variant='dense' disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0, justifyContent: 'space-between' }}>
             <div>
-              <FaLeaf size={30} /> <FaInfinity />
+              <FaLeaf size={30} /> {user.tea}
             </div>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'space-around' }}>
               <Button variant='text' color='inherit' size='small' sx={{ pl: 3, pr: 3 }}>

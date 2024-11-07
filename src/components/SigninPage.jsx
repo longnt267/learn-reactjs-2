@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { authApi } from '../apis/auth'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth' // Import useAuth hook
 
 const SigninPage = () => {
   const [errors, setErrors] = useState({}) // Tích hợp các lỗi thành 1 object duy nhất
@@ -13,6 +14,7 @@ const SigninPage = () => {
   const [showPassword, setShowPassword] = useState(false) // Added state for showing password
   const [rememberAccount, setRememberAccount] = useState(false) // Added state for remembering account
   const navigate = useNavigate()
+  const { login, setUser } = useAuth() // Lấy login và setUser từ AuthContext
 
   const validateForm = () => {
     let isValid = true
@@ -40,7 +42,8 @@ const SigninPage = () => {
     setLoading(true) // Set loading to true when starting the API call
     try {
       const response = await authApi.login(email, password)
-      localStorage.setItem('token', response.token)
+      login(response.token)
+      setUser(response.user)
       if (rememberAccount) {
         localStorage.setItem('email', email)
       }
@@ -182,7 +185,6 @@ const SigninPage = () => {
           </Button>
         </Box>
       </Box>
-      <ToastContainer position='top-right' autoClose={3000} />
     </Grid>
   )
 }

@@ -15,7 +15,8 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
-  InputAdornment
+  InputAdornment,
+  CircularProgress
 } from '@mui/material'
 import './product.css'
 import * as React from 'react'
@@ -23,63 +24,9 @@ import { styled } from '@mui/material/styles'
 import { FaLeaf } from 'react-icons/fa'
 import { colors } from '../../assets/color'
 import { productApi } from '../../apis/product.js'
-
-const cardData = [
-  {
-    img: 'https://picsum.photos/800/450?random=1',
-    tag: 'Engineering',
-    title: 'Revolutionizing software development with cutting-edge tools',
-    description:
-      'Our latest engineering tools are designed to streamline workflows and boost productivity. Discover how these innovations are transforming the software development landscape.',
-    authors: [
-      { name: 'Remy Sharp', avatar: '/static/images/avatar/1.jpg' },
-      { name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg' }
-    ]
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=2',
-    tag: 'Product',
-    title: 'Innovative product features that drive success',
-    description:
-      'Explore the key features of our latest product release that are helping businesses achieve their goals. From user-friendly interfaces to robust functionality, learn why our product stands out.',
-    authors: [{ name: 'Erica Johns', avatar: '/static/images/avatar/6.jpg' }]
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=3',
-    tag: 'Design',
-    title: 'Designing for the future: trends and insights',
-    description:
-      'Stay ahead of the curve with the latest design trends and insights. Our design team shares their expertise on creating intuitive and visually stunning user experiences.',
-    authors: [{ name: 'Kate Morrison', avatar: '/static/images/avatar/7.jpg' }]
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=4',
-    tag: 'Company',
-    title: "Our company's journey: milestones and achievements",
-    description:
-      "Take a look at our company's journey and the milestones we've achieved along the way. From humble beginnings to industry leader, discover our story of growth and success.",
-    authors: [{ name: 'Cindy Baker', avatar: '/static/images/avatar/3.jpg' }]
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=45',
-    tag: 'Engineering',
-    title: 'Pioneering sustainable engineering solutions',
-    description:
-      "Learn about our commitment to sustainability and the innovative engineering solutions we're implementing to create a greener future. Discover the impact of our eco-friendly initiatives.",
-    authors: [
-      { name: 'Agnes Walker', avatar: '/static/images/avatar/4.jpg' },
-      { name: 'Trevor Henderson', avatar: '/static/images/avatar/5.jpg' }
-    ]
-  },
-  {
-    img: 'https://picsum.photos/800/450?random=6',
-    tag: 'Product',
-    title: 'Maximizing efficiency with our latest product updates',
-    description:
-      'Our recent product updates are designed to help you maximize efficiency and achieve more. Get a detailed overview of the new features and improvements that can elevate your workflow.',
-    authors: [{ name: 'Travis Howard', avatar: '/static/images/avatar/2.jpg' }]
-  }
-]
+import { toast } from 'react-toastify'
+import { useAuth } from '../../hooks/useAuth.js'
+import { orderApi } from '../../apis/order.js'
 
 const SyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -118,6 +65,13 @@ export const ListProduct = () => {
   const [open, setOpen] = React.useState(false)
   const [products, setProducts] = React.useState([])
   const [selectedProduct, setSelectedProduct] = React.useState(null)
+  const [quantity, setQuantity] = React.useState(1)
+  const [loading, setLoading] = React.useState(false)
+  const { user, token, setUser } = useAuth() // Lấy user từ context
+
+  const handleQuantityChange = (event) => {
+    setQuantity(Number(event.target.value))
+  }
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -139,7 +93,6 @@ export const ListProduct = () => {
     setFocusedCardIndex(null)
   }
 
-  // Thay đổi hàm này để lấy thông tin trực tiếp từ product
   const handleClickOpen = (product) => {
     setSelectedProduct(product)
     setOpen(true)
@@ -147,6 +100,51 @@ export const ListProduct = () => {
 
   const handleClose = () => {
     setOpen(false)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
+  }
+
+  const handleCreateOrder = async () => {
+    if (!user || !token || loading) { // Thêm check loading
+      return
+    }
+  
+    setLoading(true)
+    try {
+      const orderData = {
+        user_id: user._id,
+        product_id: selectedProduct._id,
+        quantity: quantity,
+        tea: selectedProduct.tea
+      }
+  
+      await toast.promise(orderApi.create(orderData, token), {
+        pending: 'Đang xử lý đơn hàng...',
+        success: {
+          render({ data }) {
+            handleClose()
+            setQuantity(1)
+            if (data.user?.tea) {
+              setUser({
+                ...user,
+                tea: data.user.tea
+              })
+            }
+            return data.message || 'Đổi quà thành công!'
+          }
+        },
+        error: {
+          render({ data }) {
+            setLoading(false)
+            return data?.message || 'Có lỗi xảy ra khi đổi quà!'
+          }
+        }
+      })
+    } catch (error) {
+      console.error('Error creating order:', error)
+      setLoading(false)
+    }
   }
 
   return (
@@ -225,7 +223,6 @@ export const ListProduct = () => {
         </Grid>
       </Box>
 
-      {/* Dialog sẽ sử dụng selectedProduct trực tiếp */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ backgroundColor: colors.linen, color: colors.green }}>Chi tiết sản phẩm</DialogTitle>
         <DialogContent sx={{ backgroundColor: colors.linen, paddingTop: 10 }}>
@@ -265,6 +262,8 @@ export const ListProduct = () => {
             <TextField
               label='Số lượng'
               type='number'
+              value={quantity}
+              onChange={handleQuantityChange}
               InputProps={{
                 endAdornment: <InputAdornment position='end'></InputAdornment>
               }}
@@ -273,6 +272,7 @@ export const ListProduct = () => {
                 min: 1,
                 max: 2
               }}
+              disabled={loading} // Disable TextField khi loading
             />
             <Button
               sx={{
@@ -281,8 +281,10 @@ export const ListProduct = () => {
                 '&:hover': { backgroundColor: colors.green, color: colors.pearl },
                 width: '20%'
               }}
+              onClick={handleCreateOrder}
+              disabled={loading || !user || !token} // Thêm các điều kiện disable
             >
-              Đổi quà
+              {loading ? <CircularProgress size={24} /> : 'Đổi quà'}
             </Button>
           </Box>
         </DialogActions>
