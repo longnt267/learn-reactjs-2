@@ -36,18 +36,9 @@ export const Header = () => {
   const navigate = useNavigate()
   const [open, setOpen] = React.useState(false)
   const { logout, user } = useAuth() // Lấy logout và user từ auth context
-
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen)
   }
-
-  const handleLogout = () => {
-    logout() // Gọi logout từ context
-    toast.success('Đăng xuất thành công!')
-    // Không cần navigate vì PublicRoute sẽ tự redirect khi isAuthenticated = false
-  }
-
-  
 
   return (
     <AppBar

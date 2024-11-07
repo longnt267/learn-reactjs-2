@@ -1,4 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react'
+import { userApi } from '../apis/user.js'
+
 
 export const AuthContext = createContext({
   isAuthenticated: false,
@@ -17,25 +19,32 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'))
 
   useEffect(() => {
-    const checkAuth = () => {
-      try {
-        const storedToken = localStorage.getItem('token')
-        if (storedToken) {
+    const initializeAuth = async () => {
+      const storedToken = localStorage.getItem('token')
+      
+      if (storedToken) {
+        try {
           setToken(storedToken)
+          // Gọi API để lấy thông tin user
+          const userData = await userApi.getLogin(storedToken)
+          setUser(userData)
           setIsAuthenticated(true)
-        } else {
-          setIsAuthenticated(false)
-          setUser(null)
+        } catch (error) {
+          console.error('Auth initialization failed:', error)
+          localStorage.removeItem('token')
           setToken(null)
+          setUser(null)
+          setIsAuthenticated(false)
         }
-      } catch (error) {
-        console.error('Auth check failed:', error)
-      } finally {
-        setLoading(false)
+      } else {
+        setIsAuthenticated(false)
+        setUser(null)
+        setToken(null)
       }
+      setLoading(false)
     }
 
-    checkAuth()
+    initializeAuth()
   }, [])
 
   const login = (newToken, userData) => {
