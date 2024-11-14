@@ -12,5 +12,18 @@ export const orderApi = {
     } catch (error) {
       throw error
     }
+  },
+  getListByUser: async (token, params = null) => {
+    try {
+      const response = await api.get('/order', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        params
+      })
+      return response.data
+    } catch (error) {
+      throw error
+    }
   }
 }
