@@ -1,6 +1,6 @@
-import { HomeLayout } from '../layouts/Home/Home'
 import MainLayout from '../layouts/MainLayout'
 import { Home } from '../pages/Home/Home'
+import { Order } from '../pages/Order/Order'
 
 export const publicRoutes = [
   {
@@ -13,11 +13,11 @@ export const privateRoutes = [
   {
     path: '/home',
     element: <Home />
+  },
+  {
+    path: '/order',
+    element: <Order />
   }
-  // {
-  //   path: '/profile',
-  //   element: <Profile />,
-  // },
   // {
   //   path: '/dashboard',
   //   element: <Dashboard />,

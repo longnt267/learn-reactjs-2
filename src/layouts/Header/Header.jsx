@@ -53,16 +53,25 @@ export const Header = () => {
     >
       <Container maxWidth='lg'>
         <StyledToolbar variant='dense' disableGutters>
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0, justifyContent: 'space-between' }}>
-            <div>
-              <FaLeaf size={30} /> {user.tea}
-            </div>
+          <Box sx={{ flexGrow: 1, display: 'flex', px: 0, justifyContent: 'space-between' }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+              <Box color='inherit' sx={{ p: 0, m: 0, cursor: 'pointer' }} onClick={() => navigate('/home')}>
+                <FaLeaf size={30} />
+              </Box>
+              <Box>{user.tea}</Box>
+            </Box>
             <Box sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'space-around' }}>
               <Button variant='text' color='inherit' size='small' sx={{ pl: 3, pr: 3 }}>
                 Chơi may rủi nè
               </Button>
-              <Button variant='text' color='inherit' size='small' sx={{ pl: 3, pr: 3 }}>
-                Vô đổi quà nè
+              <Button
+                variant='text'
+                color='inherit'
+                size='small'
+                sx={{ pl: 3, pr: 3 }}
+                onClick={() => navigate('/order')}
+              >
+                Vô xem quà
               </Button>
               <Button variant='text' color='inherit' size='small' sx={{ pl: 3, pr: 3 }}>
                 Xem linh tinh nè
