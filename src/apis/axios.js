@@ -18,6 +18,7 @@ export const endpoints = {
   auth: {
     login: '/auth/login',
     register: '/auth/register',
+    savePrize: '/auth/save-prize',
     refreshToken: '/auth/refresh-token',
     logout: '/auth/logout'
   },
@@ -71,10 +72,7 @@ export default {
   },
 
   // Upload file
-  upload: async (endpoint, file, onUploadProgress = () => {}) => {
-    const formData = new FormData()
-    formData.append('file', file)
-
+  upload: async (endpoint, formData, onUploadProgress = () => {}) => {
     try {
       const response = await axiosInstance.post(endpoint, formData, {
         headers: {

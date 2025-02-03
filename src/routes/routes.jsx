@@ -4,7 +4,7 @@ import { Order } from '../pages/Order/Order'
 
 export const publicRoutes = [
   {
-    path: '/login',
+    path: '/',
     element: <MainLayout />
   }
 ]
