@@ -1,10 +1,9 @@
-import { HomeLayout } from '../layouts/Home/Home'
 import MainLayout from '../layouts/MainLayout'
 import { Home } from '../pages/Home/Home'
 
 export const publicRoutes = [
   {
-    path: '/login',
+    path: '/',
     element: <MainLayout />
   }
 ]

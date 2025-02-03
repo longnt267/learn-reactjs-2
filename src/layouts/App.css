@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  background-image: url('https://hive-development.s3.ap-southeast-2.amazonaws.com/users/1738556935551-hinh-nen-tet-7-min.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAYSE4NUZXBSKO7QUP%2F20250203%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Date=20250203T042856Z&X-Amz-Expires=86400&X-Amz-Signature=7bfefbf8ad92b06c5627f488c4d8f66d519f7839a3f13beccd5da88760f299e7&X-Amz-SignedHeaders=host&x-id=GetObject');
+  background-size: cover;
+  background-position: center;
+}
+
+.wheel {
+  margin-bottom: 20px;
+}
+
+.spin-button {
+  padding: 10px 20px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.spin-button:hover {
+  background-color: #1976d2;
+}
+
+/* CSS cho button upload ảnh */
+.upload-section input[type="file"] {
+  display: none; /* Ẩn nút input mặc định */
+}
+
+.upload-section label {
+  background-color: #4CAF50; /* Màu nền giống nút SPIN */
+  color: white; /* Màu chữ */
+  padding: 10px 20px; /* Khoảng cách giữa chữ và viền */
+  font-size: 16px; /* Kích thước chữ */
+  border-radius: 5px; /* Góc bo tròn */
+  cursor: pointer; /* Đổi con trỏ khi hover */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển màu nền và phóng to */
+  display: inline-block; /* Cho phép đặt nó vào dòng */
+  text-align: center; /* Canh giữa chữ */
+}
+
+/* Hiệu ứng khi hover */
+.upload-section label:hover {
+  background-color: #45a049; /* Thay đổi màu nền khi hover */
+  transform: scale(1.05); /* Phóng to nút khi hover */
+}
+
+/* Hiển thị tên file đã chọn */
+.upload-section p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333; /* Màu chữ */
+}
+
+/* Định dạng chung cho phần upload */
+.upload-section {
+  margin-bottom: 20px; /* Khoảng cách giữa các phần */
+  text-align: center; /* Canh giữa toàn bộ phần */
+}
